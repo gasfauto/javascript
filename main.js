@@ -1,65 +1,66 @@
-let header = document.getElementById("menuNav")
-let navbar = document.createElement("nav")
-navbar.classList.add("navbar", "navbar-expand-lg", "navbar-light", "bg-light")
-navbar.innerHTML=` <div class="container-fluid">
-<a class="navbar-brand" href="#">Simulador</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-      <li class="nav-item">
-        <a class="nav-link active" aria-current="page" href="#">Ingresa un producto</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Ingresa un cliente</a>
-      </li>
-    </ul>
-</div>
-</div>
-`
-header.appendChild(navbar)
+const formularioCliente = document.getElementById('customerForm');
+const botonMostrar = document.getElementById('showInfo');
+const botonBorrar = document.getElementById('deleteInfo');
+const infoContainer = document.getElementById('infoContainer');
 
+const guardarInfo = (e) => {
+  e.preventDefault();
+  const nombre = document.getElementById('name').value;
+  const apellido = document.getElementById('lastName').value;
+  const rfc = document.getElementById('rfc').value;
 
+  const customerInfo = {
+    nombre: nombre,
+    apellido: apellido,
+    rfc: rfc,
+  };
+  const listaClientes = localStorage.getItem('customerList');
+  const listaClientesParseada = JSON.parse(listaClientes) || [];
+  listaClientesParseada.push(customerInfo);
+  localStorage.setItem('customerList', JSON.stringify(listaClientesParseada));
 
+  formularioCliente.reset();
+  mostrarInfo();
+};
 
+const mostrarInfo = () => {
+  infoContainer.innerHTML = '';
+  const infoDesdeStorage = localStorage.getItem('customerList');
 
-
-class Producto {
-    constructor (nombre, precio) {
-        this.nombre = nombre.toUpperCase();
-        this.precio = parseFloat(precio);
-        this.existencias = [];
-    }
-    agregarExistencia(existencia) {
-        this.existencia.push(existencia);
-    }
-    sumaIva() {
-        this.precio = this.precio*1.16;
-    }
+  if (infoDesdeStorage) {
+    const infoParseada = JSON.parse(infoDesdeStorage);
+    infoParseada.forEach((customer, indexDelCustomer)=>{
+      const nuevaCard = document.createElement('div');
+      nuevaCard.className = "card";
+      nuevaCard.innerHTML = `
+      <h5>${customer.nombre}</h5>
+      <h6>${customer.apellido}</h6>
+      <p>${customer.rfc}</p>
+      <button type="button" onclick="borrarItemEspecifico(${indexDelCustomer})">Borrar Item</button>
+      `
+      infoContainer.append(nuevaCard)
+    })
+  } else {
+    infoContainer.innerHTML = '<h2>No hay info para mostrar</h2>'
+  }
 }
 
-class Existencia {
-    constructor(cantidad, unidad) {
-        this.cantidad = Number(cantidad);
-        this.unidad = unidad.toUpperCase();
-    }
+const borrarListaStorage = () => {
+  localStorage.removeItem('customerList');
+  mostrarInfo();
 }
 
-const productos = [];
+const borrarItemEspecifico = (indiceDelCliente)=> {
+  const infoDesdeStorage = localStorage.getItem('customerList');
+  const infoParseada = JSON.parse(infoDesdeStorage);
+  if(infoParseada.length ===1) {
+    borrarListaStorage();
+  } else {
+    infoParseada.splice(indiceDelCliente, 1);
+    localStorage.setItem('customerList', JSON.stringify(infoParseada))
+  }
+}
 
-productos.push (new Producto ("Desarmador", 25.86));
-productos.push (new Producto ("Tubo PVC 4", 70));
-productos.push (new Producto ("Taladro B&D", 250));
-
-const existencias = [];
-
-existencias.push(new Existencia("2", "Pieza"));
-existencias.push(new Existencia ("3", "Tubo 6m"));
-existencias.push(new Existencia ("1", "Pieza"));
-
-for (const Producto of productos)
-for (const Existencia of existencias)
-    Producto.sumaIva();
-console.log(productos)
-console.log(existencias)
+formularioCliente.onsubmit = (e) =>guardarInfo(e);
+botonMostrar.onclick = () => mostrarInfo();
+botonBorrar.onclick = () => borrarListaStorage();
