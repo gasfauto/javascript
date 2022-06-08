@@ -81,9 +81,13 @@ const eliminarDetalleById = (id) =>{
     arregloDetalle = arregloDetalle.filter((detalle) =>{
         if (+id !== +detalle.descripcion){
             return detalle;
+            
         }
     });
+    
     redibujarTabla();
+    Swal.fire("Partida eliminada")
+    
 }
 
 const agregarDetalle = (objDetalle) => {
