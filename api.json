@@ -1,0 +1,38 @@
+[
+    {
+        "precio": 500,
+        "id": 1,
+        "title": "Mouse Logitech",
+        "thumbnailUrl": "./img/shopping.png"
+    },
+    {
+        "precio": 300,
+        "id": 2,
+        "title": "Pad de Mouse",
+        "thumbnailUrl": "./img/shopping (1).png"
+    },
+    {
+        "precio": 60,
+        "id": 3,
+        "title": "Gomas de auriculares",
+        "thumbnailUrl": "./img/gomas.png"
+    },
+    {
+        "precio": 150,
+        "id": 4,
+        "title": "Auriculares",
+        "thumbnailUrl": "./img/auriculares.png"
+    },
+    {
+        "precio": 749,
+        "id": 5,
+        "title": "Teclado Corsair K55 RGB",
+        "thumbnailUrl": "./img/tecladocorsair.png"
+    },
+    {
+        "precio": 1100,
+        "id": 6,
+        "title": "Monitor Curvo MSI",
+        "thumbnailUrl": "./img/monitor.png"
+    }
+]
